@@ -202,6 +202,22 @@ public class AMPHtmlParserTest {
         }
     }
 
+    @Test
+    public void testAmpVoidTag() {
+        try {
+            String inputHtml =
+                    readFile(
+                            "test-cases/tags/testAmpVoidTag.html");
+            final int maxNode = 10000;
+            ValidatorProtos.ValidationResult result =
+                    ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.EXIT_ON_FIRST_ERROR, maxNode);
+            Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 0 error");
+            Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
+        } catch (final IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     //VALIDATION TAG
 // TODO - Tagchowder implicitly added html tag to the parent of head.
 //    @Test
@@ -1073,7 +1089,8 @@ public class AMPHtmlParserTest {
         }
     }
 
-    @Test
+    //after feb 24 2022 amphtml sync (validator-all.protoascii) this is allowed inside EMAIL_SPECIFIC_DECLARATIONS
+    @Test(enabled = false)
     public void testCSSSyntaxDisallowedPropertyValue() {
         try {
             String inputHtml =
